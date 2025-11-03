@@ -9,12 +9,23 @@ package Chat.Entity;
  * @author Sahan Geesara
  */
 public class Chat {
+    
+    private int id;
     private User user;
     private String message;
 
-    public Chat(User user,String message){
+    public Chat(){
+        
+    }
+    public Chat(int id,String message){
+        this.id =id;
         this.message= message;
+       
+    }
+    public Chat(User user,String message){
         this.user =user;
+        this.message= message;
+       
     }
         
     
@@ -37,6 +48,27 @@ public class Chat {
      */
     public String getMessage() {
         return message;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
     
     

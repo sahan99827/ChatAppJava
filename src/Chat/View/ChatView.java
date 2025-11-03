@@ -4,22 +4,43 @@
  */
 package Chat.View;
 
-import Chat.Controller.UserController;
-
+import Chat.Controller.*;
+import Chat.Entity.*;
+import java.io.*;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Sahan Geesara
  */
 public class ChatView extends javax.swing.JFrame {
-    private String name;
     private UserController usercontroller;
+    private ChatController chatController;
+    
+    private User currentUser; 
     /**
      * Creates new form ChatView
      */
-    public ChatView(String name) {
+    public ChatView(User currentUser) {
         initComponents();
-        this.name=name;
-        jblName.setText(name);
+        setTitle("Chat App");
+        setLocation(600,300);
+        this.currentUser = currentUser;
+        jblName.setText(currentUser.getName());
+        chatController = new ChatController();
+          try {
+                chatController.loadOldMessages();  
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error loading old messages: " + e.getMessage());
+            }
+        ChatManager.addWindow(this);  
+        
+          for (Chat chat : chatController.chatlist) {
+                if (chat.getUser() != null)
+                    txtChatAria.append(chat.getUser().getName() + ": " + chat.getMessage() + "\n");
+            }
+        
     }
 
     /**
@@ -37,7 +58,9 @@ public class ChatView extends javax.swing.JFrame {
         cmbLogin = new javax.swing.JComboBox<>();
         txtMsg = new javax.swing.JTextField();
         btnSend = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        panalechat = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtChatAria = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,11 +88,11 @@ public class ChatView extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(37, Short.MAX_VALUE)
+                .addContainerGap(64, Short.MAX_VALUE)
                 .addComponent(jblName, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
         );
@@ -78,10 +101,10 @@ public class ChatView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
                     .addComponent(jblName)
-                    .addComponent(cmbLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cmbLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         txtMsg.addActionListener(new java.awt.event.ActionListener() {
@@ -90,37 +113,47 @@ public class ChatView extends javax.swing.JFrame {
             }
         });
 
-        btnSend.setBackground(new java.awt.Color(0, 204, 153));
+        btnSend.setBackground(new java.awt.Color(51, 51, 255));
         btnSend.setForeground(new java.awt.Color(255, 255, 255));
-        btnSend.setText("send >");
+        btnSend.setText("send");
         btnSend.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSendActionPerformed(evt);
+            }
+        });
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        panalechat.setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        txtChatAria.setBackground(new java.awt.Color(153, 255, 255));
+        txtChatAria.setColumns(20);
+        txtChatAria.setRows(5);
+        jScrollPane1.setViewportView(txtChatAria);
+
+        javax.swing.GroupLayout panalechatLayout = new javax.swing.GroupLayout(panalechat);
+        panalechat.setLayout(panalechatLayout);
+        panalechatLayout.setHorizontalGroup(
+            panalechatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
+        panalechatLayout.setVerticalGroup(
+            panalechatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panalechat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)))
+                        .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -128,7 +161,7 @@ public class ChatView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panalechat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMsg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -137,31 +170,56 @@ public class ChatView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+   
+     public void setMessage(String message) {
+        txtChatAria.append(message + "\n\n");
+        txtChatAria.setCaretPosition(txtChatAria.getDocument().getLength());
+    }
+    
     private void txtMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMsgActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMsgActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         // TODO add your handling code here:
-         new AddMember(usercontroller).setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+       String message = txtMsg.getText().trim();
+
+            if (!message.isEmpty()) {
+                // Create chat entity and attach current user
+                Chat chat = new Chat();
+                chat.setUser(currentUser);
+                chat.setMessage(message);
+
+                // Send message to controller
+                chatController.sendMessage(chat);
+
+                // Broadcast to all chat windows
+                ChatManager.broadcastMessage(currentUser.getName(), message, this);
+
+                txtMsg.setText("");
+            }
+    }//GEN-LAST:event_btnSendActionPerformed
 
     private void cmbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLoginActionPerformed
         // TODO add your handling code here:
-        
-         String selected = (String) cmbLogin.getSelectedItem();
+
+        String selected = (String) cmbLogin.getSelectedItem();
 
         if ("Log out".equals(selected)) {
             // Close current window and open login page again
             this.dispose();
             new LoginPage().setVisible(true);
-        } 
+        }
         else if ("Login Anther User".equals(selected)) {
             // Open add user form
             new LoginPage().setVisible(true);
         }
     }//GEN-LAST:event_cmbLoginActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        new AddMember().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,8 +231,10 @@ public class ChatView extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbLogin;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jblName;
+    private javax.swing.JPanel panalechat;
+    private javax.swing.JTextArea txtChatAria;
     private javax.swing.JTextField txtMsg;
     // End of variables declaration//GEN-END:variables
 }

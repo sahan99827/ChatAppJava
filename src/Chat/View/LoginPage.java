@@ -12,11 +12,13 @@ import javax.swing.JOptionPane;
  * @author Sahan Geesara
  */
 public class LoginPage extends javax.swing.JFrame {
-
+       private UserController usercontroller;
     /**
      * Creates new form LoginPage
      */
     public LoginPage() {
+        setTitle("Chat App");
+        setLocation(300,200);
         initComponents();
     }
 
@@ -37,6 +39,7 @@ public class LoginPage extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         btnLogin = new javax.swing.JButton();
+        btnSignup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,23 +85,36 @@ public class LoginPage extends javax.swing.JFrame {
             }
         });
 
+        btnSignup.setBackground(new java.awt.Color(0, 0, 255));
+        btnSignup.setForeground(new java.awt.Color(255, 255, 255));
+        btnSignup.setText("sign up");
+        btnSignup.setToolTipText("");
+        btnSignup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignupActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLogin)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                            .addComponent(txtPhoneNumber))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(txtPhoneNumber))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogin)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSignup)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,7 +128,9 @@ public class LoginPage extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(btnLogin)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLogin)
+                    .addComponent(btnSignup))
                 .addContainerGap())
         );
 
@@ -152,13 +170,19 @@ public class LoginPage extends javax.swing.JFrame {
 
             if (user != null) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
-                ChatView chatView = new ChatView(user.getName());
+                ChatView chatView = new ChatView(user);
                 chatView.setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid phone number or password!", "Login Failed", JOptionPane.ERROR_MESSAGE);
             }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
+        // TODO add your handling code here:
+            new AddMember().setVisible(true);
+             this.dispose();
+    }//GEN-LAST:event_btnSignupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,6 +221,7 @@ public class LoginPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnSignup;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

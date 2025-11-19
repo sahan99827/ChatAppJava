@@ -1,9 +1,18 @@
-1,0,Hi boys
-2,0,Nuwan wade Harida
-3,0,owu sago
-4,0,hi kattiya
-5,0,hi hi
-6,0,ithi lamayi mk
-7,0,hi
+1,1,Hi boys
+2,3,Nuwan wade Harida
+3,4,owu sago
+4,5,hi kattiya
+5,3,hi hi
+6,1,ithi lamayi mk
+7,4,hi
 8,6,hi yaluwe math awa
-9,0,hi lamayi
+9,2,hi lamayi
+10,0,Hi
+11,0,Hi kattiya
+12,0,Hi hi Lamayi
+13,0,Mk Kattiya
+14,0,Hello Yaluwane
+15,0,Mk na yaluw
+16,0,Hi
+17,0,Hi everyone
+18,0,Hi All
